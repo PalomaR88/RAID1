@@ -180,7 +180,7 @@ sdc         8:32   0    1G  0 disk
   └─md1p1   259:1    0  500M  0 part  /mnt/raid0
 ~~~
 
-Para hacerlo de forma permanente editamos el fichero fstab de la siguiente forma.
+Para hacerlo de forma permanente editamos el fichero fstab.
 
 
 ### Tarea 7: Simula que un disco se estropea. Muestra el estado del raid para comprobar que un disco falla. ¿Podemos acceder al fichero?
