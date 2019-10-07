@@ -92,6 +92,8 @@ Consistency Policy : resync
        1       8       32        1      active sync   /dev/sdc
 ~~~
 
+El raid tiene 1GB de capacidad.
+
 
 ### Tarea 4: Crea una partición primaria de 500Mb en el raid0.
 
@@ -180,7 +182,11 @@ sdc         8:32   0    1G  0 disk
   └─md1p1   259:1    0  500M  0 part  /mnt/raid0
 ~~~
 
-Para hacerlo de forma permanente editamos el fichero fstab.
+Para hacerlo de forma permanente editamos el fichero fstab con el siguiente formato:
+
+~~~
+UUID=91bfcc07-3d5f-40a1-98be-6b2e97b247d5       /mnt/raid0     ext3 
+~~~
 
 
 ### Tarea 7: Simula que un disco se estropea. Muestra el estado del raid para comprobar que un disco falla. ¿Podemos acceder al fichero?
@@ -203,9 +209,9 @@ vagrant@Almacenamiento:/mnt/raid0$ sudo mdadm --detail /dev/md1
 
        Update Time : Mon Sep 30 10:38:01 2019
              State : clean 
-    Active Devices : 2
-   Working Devices : 2
-    Failed Devices : 0
+    Active Devices : 1
+   Working Devices : 1
+    Failed Devices : 1
      Spare Devices : 0
 
 Consistency Policy : resync
@@ -215,9 +221,14 @@ Consistency Policy : resync
             Events : 17
 
     Number   Major   Minor   RaidDevice State
-       0       8       16        0      active sync   /dev/sdb
+       -       0        0        0      removed
+
        1       8       32        1      active sync   /dev/sdc
 
+       0       8       16        -      faulty   /dev/sdb
+~~~
+
+~~~
 vagrant@Almacenamiento:/mnt/raid0$ ls
 fic_prueba  lost+found
 ~~~
@@ -229,7 +240,6 @@ fic_prueba  lost+found
 vagrant@Almacenamiento:/mnt/raid0$ sudo mdadm --remove /dev/md1 /dev/sdb
 mdadm: hot removed /dev/sdb from /dev/md1
 
-vagrant@Almacenamiento:/mnt/raid0$ 
 vagrant@Almacenamiento:/mnt/raid0$ lsblk
 NAME      MAJ:MIN RM  SIZE RO TYPE  MOUNTPOINT
 sda         8:0    0 19.8G  0 disk  
